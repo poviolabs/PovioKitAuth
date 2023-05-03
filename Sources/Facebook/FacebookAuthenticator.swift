@@ -105,7 +105,6 @@ private extension FacebookAuthenticator {
         switch result {
         case .some(let response):
           guard let dict = response as? [String: String] else {
-            Logger.error("Response is invalid!")
             seal.reject(with: Error.invalidUserData)
             return
           }
@@ -129,11 +128,9 @@ private extension FacebookAuthenticator {
             )
             seal.resolve(with: authResponse)
           } catch {
-            Logger.error("Failed to decode user details!")
             seal.reject(with: Error.userDataDecode)
           }
         case .none:
-          Logger.error("Failed to fetch user details!")
           seal.reject(with: Error.missingUserData)
         }
       }
