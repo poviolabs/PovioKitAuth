@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/poviolabs/PovioKit",
       "state" : {
-        "branch" : "chore/auth-package-removal",
-        "revision" : "cd145a84bbb67017723882b9903feee3d80ab1b4"
+        "revision" : "3b332cee4d07131f08a9ac015a297db08f6b4985",
+        "version" : "3.0.0"
       }
     }
   ],

@@ -15,7 +15,7 @@ let package = Package(
     .library(name: "PovioKitAuthFacebook", targets: ["PovioKitAuthFacebook"])
   ],
   dependencies: [
-    .package(url: "https://github.com/poviolabs/PovioKit", branch: "chore/auth-package-removal"),
+    .package(url: "https://github.com/poviolabs/PovioKit", .upToNextMajor(from: "3.0.0")),
     .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "7.0.0")),
     .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "15.1.0")),
   ],
