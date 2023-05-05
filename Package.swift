@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -15,6 +15,7 @@ let package = Package(
     .library(name: "PovioKitAuthFacebook", targets: ["PovioKitAuthFacebook"])
   ],
   dependencies: [
+    .package(url: "https://github.com/poviolabs/PovioKit", .upToNextMajor(from: "3.0.0")),
     .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "7.0.0")),
     .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "15.1.0")),
   ],
@@ -22,7 +23,7 @@ let package = Package(
     .target(
       name: "PovioKitAuthCore",
       dependencies: [
-        "PovioKitPromise"
+        .product(name: "PovioKitPromise", package: "PovioKit"),
       ],
       path: "Sources/Core"
     ),
@@ -45,9 +46,16 @@ let package = Package(
       name: "PovioKitAuthFacebook",
       dependencies: [
         "PovioKitAuthCore",
+        .product(name: "PovioKitCore", package: "PovioKit"),
         .product(name: "FacebookLogin", package: "facebook-ios-sdk")
       ],
       path: "Sources/Facebook"
+    ),
+    .testTarget(
+      name: "Tests",
+      dependencies: [
+        "PovioKitAuthCore"
+      ]
     ),
   ]
 )
