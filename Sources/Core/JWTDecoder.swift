@@ -11,9 +11,9 @@ import Foundation
 /// JWTDecoder for decoding JSON Web Tokens (JWT) tokens
 /// Inspired by https://github.com/auth0/jwt-decode
 public struct JWTDecoder {
-  private(set) var header: [String: Any] = [:]
-  private(set) var payload: [String: Any] = [:]
-  let token: String
+  public private(set) var header: [String: Any] = [:]
+  public private(set) var payload: [String: Any] = [:]
+  public let token: String
   
   public init(token: String) throws {
     self.token = token
