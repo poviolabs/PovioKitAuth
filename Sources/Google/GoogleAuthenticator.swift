@@ -69,7 +69,7 @@ extension GoogleAuthenticator: Authenticator {
   
   /// Returns the current authentication state.
   public var isAuthenticated: Authenticated {
-    return provider.currentUser != nil
+    provider.hasPreviousSignIn()
   }
   
   /// Boolean if given `url` should be handled.
