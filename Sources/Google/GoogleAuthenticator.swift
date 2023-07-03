@@ -26,7 +26,7 @@ extension GoogleAuthenticator: Authenticator {
   /// Will return promise with the `Response` object on success or with `Error` on error.
   public func signIn(from presentingViewController: UIViewController,
                      hint: String? = .none,
-                     scopes: [String]? = .none) -> Promise<Response> {
+                     additionalScopes: [String]? = .none) -> Promise<Response> {
     guard !provider.hasPreviousSignIn() else {
       // restore user
       return Promise { seal in
@@ -46,7 +46,7 @@ extension GoogleAuthenticator: Authenticator {
     // sign in
     return Promise { seal in
       provider
-        .signIn(withPresenting: presentingViewController, hint: hint, additionalScopes: scopes) { result, error in
+        .signIn(withPresenting: presentingViewController, hint: hint, additionalScopes: additionalScopes) { result, error in
           switch (result, error) {
           case (let signInResult?, _):
             seal.resolve(with: signInResult.user.authResponse)
