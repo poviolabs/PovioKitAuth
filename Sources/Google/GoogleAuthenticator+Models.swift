@@ -12,6 +12,7 @@ public extension GoogleAuthenticator {
   struct Response {
     public let userId: String?
     public let token: String
+    public let refreshToken: String
     public let name: String?
     public let email: String?
     public let expiresAt: Date?
