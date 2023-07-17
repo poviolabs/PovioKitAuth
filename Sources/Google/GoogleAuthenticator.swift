@@ -97,6 +97,7 @@ private extension GIDGoogleUser {
   var authResponse: GoogleAuthenticator.Response {
     .init(userId: userID,
           token: accessToken.tokenString,
+          refreshToken: refreshToken.tokenString,
           name: profile?.name,
           email: profile?.email,
           expiresAt: accessToken.expirationDate)
