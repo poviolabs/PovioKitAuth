@@ -1,6 +1,6 @@
 //
 //  GoogleAuthenticator.swift
-//  PovioKit
+//  PovioKitAuth
 //
 //  Created by Borut Tomazin on 25/10/2022.
 //  Copyright © 2023 Povio Inc. All rights reserved.

@@ -1,6 +1,6 @@
 //
-//  AppleAuthenticator+PovioKit.swift
-//  PovioKit
+//  AppleAuthenticator+PovioKitAuth.swift
+//  PovioKitAuth
 //
 //  Created by Borut Tomazin on 28/10/2022.
 //  Copyright © 2023 Povio Inc. All rights reserved.

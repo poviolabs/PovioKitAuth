@@ -1,6 +1,6 @@
 //
 //  JWTDecoder.swift
-//  PovioKit
+//  PovioKitAuth
 //
 //  Created by Borut Tomazin on 10/1/2023.
 //  Copyright © 2023 Povio Inc. All rights reserved.
