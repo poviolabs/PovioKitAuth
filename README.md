@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="https://swiftpackageregistry.com/poviolabs/PovioKit" alt="Package">
+    <a href="https://swiftpackageregistry.com/poviolabs/PovioKitAuth" alt="Package">
         <img src="https://img.shields.io/badge/SPM-Swift-lightgrey.svg" />
     </a>
     <a href="https://www.swift.org" alt="Swift">
@@ -12,8 +12,8 @@
     <a href="./LICENSE" alt="License">
         <img src="https://img.shields.io/badge/Licence-MIT-red.svg" />
     </a>
-    <a href="https://github.com/poviolabs/PovioKit/actions/workflows/Tests.yml" alt="Tests Status">
-        <img src="https://github.com/poviolabs/PovioKit/actions/workflows/Tests.yml/badge.svg" />
+    <a href="https://github.com/poviolabs/PovioKitAuth/actions/workflows/Tests.yml" alt="Tests Status">
+        <img src="https://github.com/poviolabs/PovioKitAuth/actions/workflows/Tests.yml/badge.svg" />
     </a>
 </p>
 
@@ -156,4 +156,4 @@ final class SnapchatAuthenticator: Authenticator {
 
 ## License
 
-PovioKit is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+PovioKitAuth is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
