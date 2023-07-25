@@ -1,6 +1,6 @@
 //
 //  GoogleAuthenticator.swift
-//  PovioKit
+//  PovioKitAuth
 //
 //  Created by Borut Tomazin on 25/10/2022.
 //  Copyright © 2023 Povio Inc. All rights reserved.
@@ -24,7 +24,9 @@ extension GoogleAuthenticator: Authenticator {
   /// SignIn user.
   ///
   /// Will return promise with the `Response` object on success or with `Error` on error.
-  public func signIn(from presentingViewController: UIViewController) -> Promise<Response> {
+  public func signIn(from presentingViewController: UIViewController,
+                     hint: String? = .none,
+                     additionalScopes: [String]? = .none) -> Promise<Response> {
     guard !provider.hasPreviousSignIn() else {
       // restore user
       return Promise { seal in
@@ -44,7 +46,7 @@ extension GoogleAuthenticator: Authenticator {
     // sign in
     return Promise { seal in
       provider
-        .signIn(withPresenting: presentingViewController) { result, error in
+        .signIn(withPresenting: presentingViewController, hint: hint, additionalScopes: additionalScopes) { result, error in
           switch (result, error) {
           case (let signInResult?, _):
             seal.resolve(with: signInResult.user.authResponse)
@@ -95,6 +97,7 @@ private extension GIDGoogleUser {
   var authResponse: GoogleAuthenticator.Response {
     .init(userId: userID,
           token: accessToken.tokenString,
+          refreshToken: refreshToken.tokenString,
           name: profile?.name,
           email: profile?.email,
           expiresAt: accessToken.expirationDate)
