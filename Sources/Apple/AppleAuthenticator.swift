@@ -121,7 +121,12 @@ extension AppleAuthenticator: ASAuthorizationControllerDelegate {
   }
   
   public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Swift.Error) {
-    rejectSignIn(with: .system(error))
+    switch error {
+    case let err as ASAuthorizationError where err.code == .canceled:
+      rejectSignIn(with: .cancelled)
+    default:
+      rejectSignIn(with: .system(error))
+    }
   }
 }
 
