@@ -8,7 +8,6 @@
 
 import Foundation
 
-@available(iOS 15.0, *)
 public extension LinkedInAuthenticator {
   struct Configuration {
     let clientId: String
@@ -16,7 +15,14 @@ public extension LinkedInAuthenticator {
     let permissions: String
     let redirectUrl: URL
     let authEndpoint: URL = "https://www.linkedin.com/oauth/v2/authorization"
-    let authCancel: URL = "https://www.linkedin.com/oauth/v2/authorization-cancel"
+    let authCancel: URL = "https://www.linkedin.com/oauth/v2/login-cancel"
+    
+    public init(clientId: String, clientSecret: String, permissions: String, redirectUrl: URL) {
+      self.clientId = clientId
+      self.clientSecret = clientSecret
+      self.permissions = permissions
+      self.redirectUrl = redirectUrl
+    }
     
     func authorizationUrl(state: String) -> URL? {
       guard var urlComponents = URLComponents(url: authEndpoint, resolvingAgainstBaseURL: false) else { return nil }

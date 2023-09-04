@@ -11,20 +11,20 @@ import SwiftUI
 import WebKit
 
 @available(iOS 15.0, *)
-struct LinkedInWebView: UIViewRepresentable {
+public struct LinkedInWebView: UIViewRepresentable {
   @Environment(\.dismiss) var dismiss
   // create a random string based on the time interval (it will be in the number form) - Needed for state.
-  typealias SuccessHandler = ((code: String, state: String)) -> Void
-  typealias ErrorHandler = () -> Void
+  public typealias SuccessHandler = ((code: String, state: String)) -> Void
+  public typealias ErrorHandler = () -> Void
   private let requestState: String = "\(Int(Date().timeIntervalSince1970))"
   private let webView: WKWebView
   private let configuration: LinkedInAuthenticator.Configuration
-  let onSuccess: SuccessHandler?
-  let onFailure: ErrorHandler?
+  public let onSuccess: SuccessHandler?
+  public let onFailure: ErrorHandler?
   
-  init(with configuration: LinkedInAuthenticator.Configuration,
-       onSuccess: @escaping SuccessHandler,
-       onFailure: @escaping ErrorHandler) {
+  public init(with configuration: LinkedInAuthenticator.Configuration,
+              onSuccess: @escaping SuccessHandler,
+              onFailure: @escaping ErrorHandler) {
     self.configuration = configuration
     let config = WKWebViewConfiguration()
     config.websiteDataStore = WKWebsiteDataStore.default()
@@ -35,11 +35,11 @@ struct LinkedInWebView: UIViewRepresentable {
     webView.navigationDelegate = makeCoordinator()
   }
   
-  func makeUIView(context: Context) -> some UIView {
+  public func makeUIView(context: Context) -> some UIView {
     webView
   }
   
-  func updateUIView(_ uiView: UIViewType, context: Context) {
+  public func updateUIView(_ uiView: UIViewType, context: Context) {
     guard let webView = uiView as? WKWebView else { return }
     guard let authURL = configuration.authorizationUrl(state: requestState) else {
       Logger.error("Failed to geet auth url!")
@@ -50,25 +50,25 @@ struct LinkedInWebView: UIViewRepresentable {
     webView.load(.init(url: authURL))
   }
   
-  func makeCoordinator() -> Coordinator {
+  public func makeCoordinator() -> Coordinator {
     Coordinator(self, requestState: requestState)
   }
 }
 
 @available(iOS 15.0, *)
-extension LinkedInWebView {
+public extension LinkedInWebView {
   class Coordinator: NSObject, WKNavigationDelegate {
     private let parent: LinkedInWebView
     private let requestState: String
     
-    init(_ parent: LinkedInWebView, requestState: String) {
+    public init(_ parent: LinkedInWebView, requestState: String) {
       self.parent = parent
       self.requestState = requestState
     }
     
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationAction: WKNavigationAction,
-                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    public func webView(_ webView: WKWebView,
+                        decidePolicyFor navigationAction: WKNavigationAction,
+                        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
       if let url = navigationAction.request.url,
          url.absoluteString.hasPrefix(parent.configuration.authCancel.absoluteString) {
         decisionHandler(.cancel)
