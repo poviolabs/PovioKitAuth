@@ -108,11 +108,23 @@ extension AppleAuthenticator: ASAuthorizationControllerDelegate {
         return .init(address: $0, isPrivate: isEmailPrivate, isVerified: isEmailVerified)
       }
       
+      // do not continue if `email` is missing
+      guard let email else {
+        rejectSignIn(with: .missingEmail)
+        return
+      }
+      
+      // do not continue if `expiresAt` is missing
+      guard let expiresAt = jwt?.expiresAt else {
+        rejectSignIn(with: .missingExpiration)
+        return
+      }
+      
       let response = Response(userId: credential.user,
                               token: identityTokenString,
                               name: credential.displayName,
                               email: email,
-                              expiresAt: jwt?.expiresAt)
+                              expiresAt: expiresAt)
       
       processingPromise?.resolve(with: response)
     case _:
@@ -139,6 +151,8 @@ public extension AppleAuthenticator {
     case invalidIdentityToken
     case unhandledAuthorization
     case credentialsRevoked
+    case missingExpiration
+    case missingEmail
   }
 }
 
