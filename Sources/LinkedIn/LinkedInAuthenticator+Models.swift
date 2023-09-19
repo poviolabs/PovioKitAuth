@@ -14,20 +14,42 @@ public extension LinkedInAuthenticator {
     let clientSecret: String
     let permissions: String
     let redirectUrl: URL
-    let authEndpoint: URL = "https://www.linkedin.com/oauth/v2/authorization"
-    let authCancel: URL = "https://www.linkedin.com/oauth/v2/login-cancel"
+    var authEndpoint: URL = "https://www.linkedin.com/oauth/v2/authorization"
+    var authCancel: URL = "https://www.linkedin.com/oauth/v2/login-cancel"
     
-    public init(clientId: String, clientSecret: String, permissions: String, redirectUrl: URL) {
+    public init(
+      clientId: String,
+      clientSecret: String,
+      permissions: String,
+      redirectUrl: URL
+    ) {
       self.clientId = clientId
       self.clientSecret = clientSecret
       self.permissions = permissions
       self.redirectUrl = redirectUrl
     }
     
+    public init(
+      clientId: String,
+      clientSecret: String,
+      permissions: String,
+      redirectUrl: URL,
+      authEndpoint: URL,
+      authCancel: URL
+    ) {
+      self.clientId = clientId
+      self.clientSecret = clientSecret
+      self.permissions = permissions
+      self.redirectUrl = redirectUrl
+      self.authEndpoint = authEndpoint
+      self.authCancel = authCancel
+    }
+    
     func authorizationUrl(state: String) -> URL? {
       guard var urlComponents = URLComponents(url: authEndpoint, resolvingAgainstBaseURL: false) else { return nil }
       urlComponents.queryItems = [
         .init(name: "response_type", value: "code"),
+        .init(name: "connection", value: "linkedin"),
         .init(name: "client_id", value: clientId),
         .init(name: "redirect_uri", value: redirectUrl.absoluteString),
         .init(name: "state", value: state),
