@@ -39,7 +39,7 @@ extension LinkedInAuthenticator: Authenticator {
     
     storage.set(true, forKey: storageIsAuthenticatedKey)
     
-    let name = [profileResponse.localizedFirstName, profileResponse.localizedLastName].joined(separator: " ")
+    let name = "\(profileResponse.localizedFirstName) \(profileResponse.localizedLastName)"
     return Response(
       userId: profileResponse.id,
       token: authResponse.accessToken,
