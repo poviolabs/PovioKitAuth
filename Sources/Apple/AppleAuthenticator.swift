@@ -90,7 +90,9 @@ extension AppleAuthenticator: ASAuthorizationControllerDelegate {
   public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
     switch authorization.credential {
     case let credential as ASAuthorizationAppleIDCredential:
-      guard let identityToken = credential.identityToken,
+      guard let authCodeData = credential.authorizationCode,
+            let authCode = String(data: authCodeData, encoding: .utf8),
+            let identityToken = credential.identityToken,
             let identityTokenString = String(data: identityToken, encoding: .utf8) else {
         rejectSignIn(with: .invalidIdentityToken)
         return
@@ -122,6 +124,7 @@ extension AppleAuthenticator: ASAuthorizationControllerDelegate {
       
       let response = Response(userId: credential.user,
                               token: identityTokenString,
+                              authCode: authCode,
                               name: credential.displayName,
                               email: email,
                               expiresAt: expiresAt)
