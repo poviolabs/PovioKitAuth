@@ -16,6 +16,10 @@ public extension LinkedInAuthenticator {
     let redirectUrl: URL
     var authEndpoint: URL = "https://www.linkedin.com/oauth/v2/authorization"
     var authCancel: URL = "https://www.linkedin.com/oauth/v2/login-cancel"
+    var audience: String?
+    public var codeVerifier: String?
+    var codeChallenge: String?
+    var codeChallengeMethod: String?
     
     public init(
       clientId: String,
@@ -35,7 +39,11 @@ public extension LinkedInAuthenticator {
       permissions: String,
       redirectUrl: URL,
       authEndpoint: URL,
-      authCancel: URL
+      authCancel: URL,
+      audience: String?,
+      codeVerifier: String?,
+      codeChallenge: String?,
+      codeChallengeMethod: String?
     ) {
       self.clientId = clientId
       self.clientSecret = clientSecret
@@ -43,11 +51,15 @@ public extension LinkedInAuthenticator {
       self.redirectUrl = redirectUrl
       self.authEndpoint = authEndpoint
       self.authCancel = authCancel
+      self.audience = audience
+      self.codeVerifier = codeVerifier
+      self.codeChallenge = codeChallenge
+      self.codeChallengeMethod = codeChallengeMethod
     }
     
-    func authorizationUrl(state: String) -> URL? {
+    public func authorizationUrl(state: String) -> URL? {
       guard var urlComponents = URLComponents(url: authEndpoint, resolvingAgainstBaseURL: false) else { return nil }
-      urlComponents.queryItems = [
+      var queryItems: [URLQueryItem] = [
         .init(name: "response_type", value: "code"),
         .init(name: "connection", value: "linkedin"),
         .init(name: "client_id", value: clientId),
@@ -55,6 +67,18 @@ public extension LinkedInAuthenticator {
         .init(name: "state", value: state),
         .init(name: "scope", value: permissions)
       ]
+      
+      if let audience {
+        queryItems.append(.init(name: "audience", value: audience))
+      }
+      if let codeChallenge {
+        queryItems.append(.init(name: "code_challenge", value: codeChallenge))
+      }
+      if let codeChallengeMethod {
+        queryItems.append(.init(name: "code_challenge_method", value: codeChallengeMethod))
+      }
+      
+      urlComponents.queryItems = queryItems
       return urlComponents.url
     }
   }

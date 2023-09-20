@@ -31,8 +31,6 @@ public struct LinkedInWebView: UIViewRepresentable {
     webView = WKWebView(frame: .zero, configuration: config)
     self.onSuccess = onSuccess
     self.onFailure = onFailure
-    
-    webView.navigationDelegate = makeCoordinator()
   }
   
   public func makeUIView(context: Context) -> some UIView {
@@ -69,6 +67,7 @@ public extension LinkedInWebView {
     public func webView(_ webView: WKWebView,
                         decidePolicyFor navigationAction: WKNavigationAction,
                         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+      // if authCancel endpoint was called, dismiss the view
       if let url = navigationAction.request.url,
          url.absoluteString.hasPrefix(parent.configuration.authCancel.absoluteString) {
         decisionHandler(.cancel)
@@ -76,26 +75,18 @@ public extension LinkedInWebView {
         return
       }
       
-      guard let url = webView.url, url.host == parent.configuration.redirectUrl.host else {
+      // extract the authorization code from the redirect url
+      guard let url = webView.url,
+            url.host == parent.configuration.redirectUrl.host,
+            let components = URLComponents(string: url.absoluteString),
+            let state = components.queryItems?.first(where: { $0.name == "state" })?.value,
+            requestState == state,
+            let code = components.queryItems?.first(where: { $0.name == "code" }) else {
         decisionHandler(.allow)
-        return
-      }
-      
-      // extract the authorization code
-      let components = URLComponents(string: url.absoluteString)
-      guard let state = components?.queryItems?.first(where: { $0.name == "state" }),
-            let code = components?.queryItems?.first(where: { $0.name == "code" }) else {
-        decisionHandler(.allow)
-        return
-      }
-      guard requestState == state.value ?? "" else {
-        parent.onFailure?()
-        decisionHandler(.allow)
-        parent.dismiss()
         return
       }
       parent.onSuccess?((code.value ?? "", parent.requestState))
-      decisionHandler(.allow)
+      decisionHandler(.cancel)
       parent.dismiss()
     }
   }
