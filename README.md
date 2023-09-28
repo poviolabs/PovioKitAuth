@@ -24,8 +24,8 @@
 
 ## Packages
 
-| [Core](Resources/Core) | [Apple](Resources/Apple) | [Google](Resources/Google) | [Facebook](Resources/Facebook) |
-| :-: | :-: | :-: | :-: |
+| [Core](Resources/Core) | [Apple](Resources/Apple) | [Google](Resources/Google) | [Facebook](Resources/Facebook) | [LinkedIn](Resources/LinkedIn) |
+| :-: | :-: | :-: | :-: | :-: |
 
 ## Installation
 
@@ -38,6 +38,7 @@
   - *PovioKitAuthApple* (Apple auth components)
   - *PovioKitAuthGoogle* (Google auth components)
   - *PovioKitAuthFacebook* (Facebook auth components)
+  - *PovioKitAuthLinkedIn* (LinkedIn auth components)
 - Select "Add Package" again and you are done.
 
 ### Migration
