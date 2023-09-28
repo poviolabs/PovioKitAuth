@@ -9,7 +9,7 @@
 import Foundation
 import PovioKitNetworking
 
-public struct LinkedInAPI {
+public final class LinkedInAPI {
   private let client: AlamofireNetworkClient
   
   public init(client: AlamofireNetworkClient = .init()) {
