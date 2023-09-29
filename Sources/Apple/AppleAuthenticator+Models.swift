@@ -17,9 +17,10 @@ public extension AppleAuthenticator {
   struct Response {
     public let userId: String
     public let token: String
+    public let authCode: String
     public let name: String?
-    public let email: Email?
-    public let expiresAt: Date?
+    public let email: Email
+    public let expiresAt: Date
   }
 }
 
