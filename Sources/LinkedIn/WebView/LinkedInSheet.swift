@@ -8,15 +8,15 @@
 import SwiftUI
 
 @available(iOS 15.0, *)
-struct LinkedInSheet: ViewModifier {
-  typealias SuccessHandler = LinkedInWebView.SuccessHandler // (Bool) -> Void
-  typealias ErrorHandler = LinkedInWebView.ErrorHandler // (Error) -> Void
-  let config: LinkedInAuthenticator.Configuration
-  let isPresented: Binding<Bool>
-  let onSuccess: SuccessHandler?
-  let onError: ErrorHandler?
+public struct LinkedInSheet: ViewModifier {
+  public typealias SuccessHandler = LinkedInWebView.SuccessHandler // (Bool) -> Void
+  public typealias ErrorHandler = LinkedInWebView.ErrorHandler // (Error) -> Void
+  public let config: LinkedInAuthenticator.Configuration
+  public let isPresented: Binding<Bool>
+  public let onSuccess: SuccessHandler?
+  public let onError: ErrorHandler?
   
-  func body(content: Content) -> some View {
+  public func body(content: Content) -> some View {
     content
       .sheet(isPresented: isPresented) {
         LinkedInWebView(with: config) { data in
@@ -29,7 +29,7 @@ struct LinkedInSheet: ViewModifier {
 }
 
 @available(iOS 15.0, *)
-extension View {
+public extension View {
   /// ViewModifier to present `LinkedInWebView` in sheet
   func linkedInSheet(with config: LinkedInAuthenticator.Configuration,
                      isPresented: Binding<Bool>,
