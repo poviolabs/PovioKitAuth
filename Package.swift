@@ -6,13 +6,15 @@ import PackageDescription
 let package = Package(
   name: "PovioKitAuth",
   platforms: [
-    .iOS(.v13)
+    .iOS(.v13),
+    .macOS(.v13)
   ],
   products: [
     .library(name: "PovioKitAuthCore", targets: ["PovioKitAuthCore"]),
     .library(name: "PovioKitAuthApple", targets: ["PovioKitAuthApple"]),
     .library(name: "PovioKitAuthGoogle", targets: ["PovioKitAuthGoogle"]),
-    .library(name: "PovioKitAuthFacebook", targets: ["PovioKitAuthFacebook"])
+    .library(name: "PovioKitAuthFacebook", targets: ["PovioKitAuthFacebook"]),
+    .library(name: "PovioKitAuthLinkedIn", targets: ["PovioKitAuthLinkedIn"])
   ],
   dependencies: [
     .package(url: "https://github.com/poviolabs/PovioKit", .upToNextMajor(from: "3.0.0")),
@@ -50,6 +52,14 @@ let package = Package(
         .product(name: "FacebookLogin", package: "facebook-ios-sdk")
       ],
       path: "Sources/Facebook"
+    ),
+    .target(
+      name: "PovioKitAuthLinkedIn",
+      dependencies: [
+        "PovioKitAuthCore",
+        .product(name: "PovioKitNetworking", package: "PovioKit")
+      ],
+      path: "Sources/LinkedIn"
     ),
     .testTarget(
       name: "Tests",
