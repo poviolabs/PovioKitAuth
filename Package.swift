@@ -27,14 +27,16 @@ let package = Package(
       dependencies: [
         .product(name: "PovioKitPromise", package: "PovioKit"),
       ],
-      path: "Sources/Core"
+      path: "Sources/Core",
+      resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]
     ),
     .target(
       name: "PovioKitAuthApple",
       dependencies: [
         "PovioKitAuthCore"
       ],
-      path: "Sources/Apple"
+      path: "Sources/Apple",
+      resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]
     ),
     .target(
       name: "PovioKitAuthGoogle",
@@ -42,7 +44,8 @@ let package = Package(
         "PovioKitAuthCore",
         .product(name: "GoogleSignInSwift", package: "GoogleSignIn-iOS")
       ],
-      path: "Sources/Google"
+      path: "Sources/Google",
+      resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]
     ),
     .target(
       name: "PovioKitAuthFacebook",
@@ -51,7 +54,8 @@ let package = Package(
         .product(name: "PovioKitCore", package: "PovioKit"),
         .product(name: "FacebookLogin", package: "facebook-ios-sdk")
       ],
-      path: "Sources/Facebook"
+      path: "Sources/Facebook",
+      resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]
     ),
     .target(
       name: "PovioKitAuthLinkedIn",
@@ -59,7 +63,8 @@ let package = Package(
         "PovioKitAuthCore",
         .product(name: "PovioKitNetworking", package: "PovioKit")
       ],
-      path: "Sources/LinkedIn"
+      path: "Sources/LinkedIn",
+      resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]
     ),
     .testTarget(
       name: "Tests",
