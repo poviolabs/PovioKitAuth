@@ -12,6 +12,7 @@ import Foundation
 public extension AppleAuthenticator {
   enum Nonce {
     case random(length: UInt)
+    case custom(value: String)
   }
   
   struct Response {
