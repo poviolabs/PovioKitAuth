@@ -172,6 +172,8 @@ private extension AppleAuthenticator {
         return
       }
       request.nonce = generateRandomNonceString(length: length).sha256
+    case .custom(let value):
+      request.nonce = value
     case .none:
       break
     }
