@@ -23,6 +23,17 @@ public extension AppleAuthenticator {
     public let email: Email
     public let expiresAt: Date
   }
+  
+  enum Error: Swift.Error {
+    case system(_ error: Swift.Error)
+    case cancelled
+    case invalidNonceLength
+    case invalidIdentityToken
+    case unhandledAuthorization
+    case credentialsRevoked
+    case missingExpiration
+    case missingEmail
+  }
 }
 
 public extension AppleAuthenticator.Response {
