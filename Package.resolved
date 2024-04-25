@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS.git",
       "state" : {
-        "revision" : "8c0b028aedf617d6d780d448dc836f7048166d0f",
-        "version" : "1.7.4"
+        "revision" : "c89ed571ae140f8eb1142735e6e23d7bb8c34cb2",
+        "version" : "1.7.5"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/facebook/facebook-ios-sdk",
       "state" : {
-        "revision" : "7fd8a930a5b2c940a22efafe0e214ed0df671312",
-        "version" : "15.1.0"
+        "revision" : "09eb5b0cb74127a360e0bc74a2d75ec1fd351e48",
+        "version" : "17.0.0"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/poviolabs/PovioKit",
       "state" : {
-        "revision" : "c1f4299b7b262d81b335788625c1ef287dba4c95",
-        "version" : "3.3.0"
+        "revision" : "95371aebca733fa67be58c0239e12a97d1fcf163",
+        "version" : "3.3.1"
       }
     }
   ],
