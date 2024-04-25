@@ -83,6 +83,14 @@ extension AppleAuthenticator: Authenticator {
   public func canOpenUrl(_ url: URL, application: UIApplication, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
     false
   }
+  
+  /// Generate random nonce string
+  public func generateNonceString(length: UInt = 32) -> String {
+    let charset: [Character] = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+    let result = (0..<length).compactMap { _ in charset.randomElement() }
+    guard result.count == length else { fatalError("Unable to generate nonce!") }
+    return String(result)
+  }
 }
 
 // MARK: - ASAuthorizationControllerDelegate
@@ -145,20 +153,6 @@ extension AppleAuthenticator: ASAuthorizationControllerDelegate {
   }
 }
 
-// MARK: - Error
-public extension AppleAuthenticator {
-  enum Error: Swift.Error {
-    case system(_ error: Swift.Error)
-    case cancelled
-    case invalidNonceLength
-    case invalidIdentityToken
-    case unhandledAuthorization
-    case credentialsRevoked
-    case missingExpiration
-    case missingEmail
-  }
-}
-
 // MARK: - Private Methods
 private extension AppleAuthenticator {
   func appleSignIn(on presentingViewController: UIViewController, with nonce: Nonce?) {
@@ -171,7 +165,9 @@ private extension AppleAuthenticator {
         rejectSignIn(with: .invalidNonceLength)
         return
       }
-      request.nonce = generateRandomNonceString(length: length).sha256
+      request.nonce = generateNonceString(length: length).sha256
+    case .custom(let value):
+      request.nonce = value
     case .none:
       break
     }
@@ -180,13 +176,6 @@ private extension AppleAuthenticator {
     controller.delegate = self
     controller.presentationContextProvider = presentingViewController
     controller.performRequests()
-  }
-  
-  func generateRandomNonceString(length: UInt = 32) -> String {
-    let charset: [Character] = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-    let result = (0..<length).compactMap { _ in charset.randomElement() }
-    guard result.count == length else { fatalError("Unable to generate nonce!") }
-    return String(result)
   }
   
   func setupCredentialsRevokeListener() {

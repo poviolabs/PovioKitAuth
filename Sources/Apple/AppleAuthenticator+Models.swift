@@ -12,6 +12,7 @@ import Foundation
 public extension AppleAuthenticator {
   enum Nonce {
     case random(length: UInt)
+    case custom(value: String)
   }
   
   struct Response {
@@ -21,6 +22,17 @@ public extension AppleAuthenticator {
     public let name: String?
     public let email: Email
     public let expiresAt: Date
+  }
+  
+  enum Error: Swift.Error {
+    case system(_ error: Swift.Error)
+    case cancelled
+    case invalidNonceLength
+    case invalidIdentityToken
+    case unhandledAuthorization
+    case credentialsRevoked
+    case missingExpiration
+    case missingEmail
   }
 }
 
