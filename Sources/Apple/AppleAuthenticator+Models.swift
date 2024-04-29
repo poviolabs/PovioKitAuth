@@ -19,9 +19,15 @@ public extension AppleAuthenticator {
     public let userId: String
     public let token: String
     public let authCode: String
-    public let name: String?
+    public let nameComponents: PersonNameComponents?
     public let email: Email
     public let expiresAt: Date
+
+    public var name: String {
+      [nameComponents?.givenName, nameComponents?.familyName]
+        .compactMap { $0 }
+        .joined(separator: " ")
+    }
   }
   
   enum Error: Swift.Error {
@@ -41,13 +47,5 @@ public extension AppleAuthenticator.Response {
     public let address: String
     public let isPrivate: Bool
     public let isVerified: Bool
-  }
-}
-
-extension ASAuthorizationAppleIDCredential {
-  var displayName: String {
-    [fullName?.givenName, fullName?.familyName]
-      .compactMap { $0 }
-      .joined(separator: " ")
   }
 }

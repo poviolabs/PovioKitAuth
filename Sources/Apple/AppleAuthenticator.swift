@@ -133,7 +133,7 @@ extension AppleAuthenticator: ASAuthorizationControllerDelegate {
       let response = Response(userId: credential.user,
                               token: identityTokenString,
                               authCode: authCode,
-                              name: credential.displayName,
+                              nameComponents: credential.fullName,
                               email: email,
                               expiresAt: expiresAt)
       
