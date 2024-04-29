@@ -19,7 +19,7 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/poviolabs/PovioKit", .upToNextMajor(from: "3.0.0")),
     .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "7.0.0")),
-    .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "15.0.0")),
+    .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "17.0.0")),
   ],
   targets: [
     .target(
