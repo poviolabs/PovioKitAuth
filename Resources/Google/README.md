@@ -12,11 +12,8 @@ Please read [official documentation](https://developers.google.com/identity/sign
 let authenticator = GoogleAuthenticator()
 
 // signIn user
-authenticator
+let result = try await authenticator
   .signIn(from: <view-controller-instance>)
-  .finally {
-    // handle result
-  }
 
 // get authentication status
 let state = authenticator.isAuthenticated
