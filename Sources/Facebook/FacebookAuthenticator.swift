@@ -24,7 +24,7 @@ extension FacebookAuthenticator: Authenticator {
   /// SignIn user.
   ///
   /// The `permissions` to use when doing a sign in.
-  /// Will asynchronously return the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(
     from presentingViewController: UIViewController,
     with permissions: [Permission] = [.email, .publicProfile]) async throws -> Response

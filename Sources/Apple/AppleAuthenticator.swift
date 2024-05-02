@@ -33,7 +33,7 @@ public final class AppleAuthenticator: NSObject {
 extension AppleAuthenticator: Authenticator {
   /// SignIn user
   ///
-  /// Will asynchronously return the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(from presentingViewController: UIViewController) async throws -> Response {
     try await appleSignIn(on: presentingViewController, with: nil)
   }
@@ -41,7 +41,7 @@ extension AppleAuthenticator: Authenticator {
   /// SignIn user with `nonce` value
   ///
   /// Nonce is usually needed when doing auth with an external auth provider (e.g. firebase).
-  /// Will asynchronously return the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(from presentingViewController: UIViewController, with nonce: Nonce) async throws -> Response {
     try await appleSignIn(on: presentingViewController, with: nonce)
   }

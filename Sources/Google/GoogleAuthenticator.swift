@@ -22,7 +22,7 @@ public final class GoogleAuthenticator {
 extension GoogleAuthenticator: Authenticator {
   /// SignIn user.
   ///
-  /// Will asynchronously return the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(from presentingViewController: UIViewController,
                      hint: String? = .none,
                      additionalScopes: [String]? = .none) async throws -> Response {
