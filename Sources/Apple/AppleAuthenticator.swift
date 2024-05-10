@@ -49,7 +49,8 @@ extension AppleAuthenticator: Authenticator {
   /// Clears the signIn footprint and logs out the user immediatelly.
   public func signOut() {
     storage.removeObject(forKey: storageUserIdKey)
-    rejectSignIn(with: .cancelled)
+    storage.setValue(false, forKey: storageAuthenticatedKey)
+    continuation = nil
   }
   
   /// Returns the current authentication state.
