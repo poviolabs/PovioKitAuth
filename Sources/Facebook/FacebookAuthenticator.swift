@@ -104,19 +104,11 @@ private extension FacebookAuthenticator {
       request.start { _, result, error in
         switch result {
         case .some(let response):
-          guard let dict = response as? [String: String] else {
-            seal.reject(with: Error.invalidUserData)
-            return
-          }
-          
           let decoder = JSONDecoder()
           decoder.keyDecodingStrategy = .convertFromSnakeCase
           
-          let encoder = JSONEncoder()
-          encoder.keyEncodingStrategy = .convertToSnakeCase
-          
           do {
-            let data = try encoder.encode(dict)
+            let data = try JSONSerialization.data(withJSONObject: response, options: [])
             let object = try data.decode(GraphResponse.self, with: decoder)
             
             let authResponse = Response(
