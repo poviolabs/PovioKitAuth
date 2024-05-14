@@ -23,10 +23,11 @@ public extension AppleAuthenticator {
     public let email: Email
     public let expiresAt: Date
 
-    public var name: String {
-      [nameComponents?.givenName, nameComponents?.familyName]
+    public var name: String? {
+      let fullName = [nameComponents?.givenName, nameComponents?.familyName]
         .compactMap { $0 }
         .joined(separator: " ")
+      return !fullName.isEmpty ? fullName : nil
     }
   }
   
