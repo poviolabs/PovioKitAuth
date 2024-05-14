@@ -64,11 +64,8 @@ extension AppleAuthenticator: Authenticator {
       return false
     }
 
-    return await withCheckedContinuation { continuation in
-      ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userId) { credentialsState, _ in
-        continuation.resume(returning: credentialsState == .authorized)
-      }
-    }
+    let credentialState = try? await ASAuthorizationAppleIDProvider().credentialState(forUserID: userId)
+    return credentialState == .authorized
   }
 
   /// Boolean if given `url` should be handled.
