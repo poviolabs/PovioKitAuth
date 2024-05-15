@@ -30,11 +30,6 @@ let result = try await authenticator
 // get authentication status
 let status = authenticator.isAuthenticated
 
-// check authentication status
-// we should check this when we need to explicitly query authenticator to check if authenticated
-let isAuthenticated = try await authenticator
-  .checkAuthentication()
-
 // signOut user
 authenticator.signOut() // all provider data regarding the use auth is cleared at this point
 ```

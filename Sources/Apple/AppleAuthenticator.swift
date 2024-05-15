@@ -57,16 +57,6 @@ extension AppleAuthenticator: Authenticator {
   public var isAuthenticated: Authenticated {
     storage.string(forKey: storageUserIdKey) != nil && storage.bool(forKey: storageAuthenticatedKey)
   }
-  
-  /// Checks the current auth state and returns the boolean value asynchronously.
-  public func checkAuthentication() async -> Authenticated {
-    guard let userId = storage.string(forKey: storageUserIdKey) else {
-      return false
-    }
-
-    let credentialState = try? await ASAuthorizationAppleIDProvider().credentialState(forUserID: userId)
-    return credentialState == .authorized
-  }
 
   /// Boolean if given `url` should be handled.
   ///
