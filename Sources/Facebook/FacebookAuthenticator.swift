@@ -10,7 +10,6 @@ import Foundation
 import FacebookLogin
 import PovioKitCore
 import PovioKitAuthCore
-import PovioKitPromise
 
 public final class FacebookAuthenticator {
   private let provider: LoginManager
@@ -25,15 +24,14 @@ extension FacebookAuthenticator: Authenticator {
   /// SignIn user.
   ///
   /// The `permissions` to use when doing a sign in.
-  /// Will return promise with the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(
     from presentingViewController: UIViewController,
-    with permissions: [Permission] = [.email, .publicProfile]) -> Promise<Response>
+    with permissions: [Permission] = [.email, .publicProfile]) async throws -> Response
   {
     let permissions: [String] = permissions.map { $0.name }
-    
-    return signIn(with: permissions, on: presentingViewController)
-      .flatMap(with: fetchUserDetails)
+    let token = try await signIn(with: permissions, on: presentingViewController)
+    return try await fetchUserDetails(with: token)
   }
   
   /// Clears the signIn footprint and logs out the user immediatelly.
@@ -69,38 +67,37 @@ public extension FacebookAuthenticator {
 
 // MARK: - Private Methods
 private extension FacebookAuthenticator {
-  func signIn(with permissions: [String], on presentingViewController: UIViewController) -> Promise<AccessToken> {
-    Promise { seal in
-      provider
-        .logIn(permissions: permissions, from: presentingViewController) { result, error in
-          switch (result, error) {
-          case (let result?, nil):
-            if result.isCancelled {
-              seal.reject(with: Error.cancelled)
-            } else if let token = result.token {
-              seal.resolve(with: token)
-            } else {
-              seal.reject(with: Error.invalidIdentityToken)
-            }
-          case (nil, let error?):
-            seal.reject(with: Error.system(error))
-          case _:
-            seal.reject(with: Error.system(NSError(domain: "com.povio.facebook.error", code: -1, userInfo: nil)))
+  func signIn(with permissions: [String], on presentingViewController: UIViewController) async throws -> AccessToken {
+    try await withCheckedThrowingContinuation { continuation in
+      provider.logIn(permissions: permissions, from: presentingViewController) { result, error in
+        switch (result, error) {
+        case (let result?, nil):
+          if result.isCancelled {
+            continuation.resume(throwing: Error.cancelled)
+          } else if let token = result.token {
+            continuation.resume(returning: token)
+          } else {
+            continuation.resume(throwing: Error.invalidIdentityToken)
           }
+        case (nil, let error?):
+          continuation.resume(throwing: Error.system(error))
+        default:
+          continuation.resume(throwing: Error.system(NSError(domain: "com.povio.facebook.error", code: -1, userInfo: nil)))
         }
+      }
     }
   }
-  
-  func fetchUserDetails(with token: AccessToken) -> Promise<Response> {
-    let request = GraphRequest(
-      graphPath: "me",
-      parameters: ["fields": "id, email, first_name, last_name"],
-      tokenString: token.tokenString,
-      httpMethod: nil,
-      flags: .doNotInvalidateTokenOnError
-    )
-    
-    return Promise { seal in
+
+  func fetchUserDetails(with token: AccessToken) async throws -> Response {
+    try await withCheckedThrowingContinuation { continuation in
+      let request = GraphRequest(
+        graphPath: "me",
+        parameters: ["fields": "id, email, first_name, last_name"],
+        tokenString: token.tokenString,
+        httpMethod: nil,
+        flags: .doNotInvalidateTokenOnError
+      )
+
       request.start { _, result, error in
         switch result {
         case .some(let response):
@@ -110,7 +107,7 @@ private extension FacebookAuthenticator {
           do {
             let data = try JSONSerialization.data(withJSONObject: response, options: [])
             let object = try data.decode(GraphResponse.self, with: decoder)
-            
+
             let authResponse = Response(
               userId: object.id,
               token: token.tokenString,
@@ -118,12 +115,12 @@ private extension FacebookAuthenticator {
               email: object.email,
               expiresAt: token.expirationDate
             )
-            seal.resolve(with: authResponse)
+            continuation.resume(returning: authResponse)
           } catch {
-            seal.reject(with: Error.userDataDecode)
+            continuation.resume(throwing: Error.userDataDecode)
           }
         case .none:
-          seal.reject(with: Error.missingUserData)
+          continuation.resume(throwing: Error.missingUserData)
         }
       }
     }

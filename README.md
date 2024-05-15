@@ -54,19 +54,13 @@ let manager = SocialAuthenticationManager(authenticators: [AppleAuthenticator(),
 
 // signIn user with Apple
 let appleAuthenticator = manager.authenticator(for: AppleAuthenticator.self)
-appleAuthenticator?
+let result = try await appleAuthenticator?
   .signIn(from: <view-controller-instance>, with: .random(length: 32))
-  .finally {
-    // handle result
-  }
   
 // signIn user with Facebook
 let facebookAuthenticator = manager.authenticator(for: FacebookAuthenticator.self)
-facebookAuthenticator?
+let result = try await facebookAuthenticator?
   .signIn(from: <view-controller-instance>, with: [.email])
-  .finally {
-    // handle result
-  }
   
 // return currently authenticated authenticator
 let authenticated: Authenticator? = manager.authenticator
@@ -123,11 +117,11 @@ You can easily add new authenticator that is not built-in with PovioKitAuth pack
 
 ```swift
 final class SnapchatAuthenticator: Authenticator {
-  public func signIn(from presentingViewController: UIViewController) -> Promise<Response> {
-    Promise { seal in
+  public func signIn(from presentingViewController: UIViewController) async throws -> Response {
+    try await withCheckedThrowingContinuation { continuation in
       SCSDKLoginClient.login(from: presentingViewController) { [weak self] success, error in
         guard success, error == nil else {
-          seal.reject(with: error)
+          continuation.resume(throwing: error)
           return
         }
         
@@ -135,7 +129,7 @@ final class SnapchatAuthenticator: Authenticator {
         let variables = ["page": "bitmoji"]
         SCSDKLoginClient.fetchUserData(withQuery: query, variables: variables) { resources in
           ...
-          seal.resolve(with: response)
+          continuation.resume(returning: response)
         }
       }
     }

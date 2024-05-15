@@ -25,7 +25,7 @@ public final class LinkedInAuthenticator {
 extension LinkedInAuthenticator: Authenticator {
   /// SignIn user.
   ///
-  /// Will return promise with the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(authCode: String, configuration: Configuration) async throws -> Response {
     let authRequest: LinkedInAPI.LinkedInAuthRequest = .init(
       code: authCode,
