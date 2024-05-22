@@ -51,7 +51,6 @@ let package = Package(
       name: "PovioKitAuthFacebook",
       dependencies: [
         "PovioKitAuthCore",
-        .product(name: "PovioKitCore", package: "PovioKit"),
         .product(name: "FacebookLogin", package: "facebook-ios-sdk")
       ],
       path: "Sources/Facebook",
