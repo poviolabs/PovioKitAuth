@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/poviolabs/PovioKit",
       "state" : {
-        "revision" : "95371aebca733fa67be58c0239e12a97d1fcf163",
-        "version" : "3.3.1"
+        "revision" : "96fa97cffa12ff644f10008133da062bec463ff8",
+        "version" : "4.0.0"
       }
     }
   ],
