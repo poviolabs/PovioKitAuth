@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
   name: "PovioKitAuth",
   platforms: [
-    .iOS(.v13),
-    .macOS(.v13)
+    .iOS(.v13)
   ],
   products: [
     .library(name: "PovioKitAuthCore", targets: ["PovioKitAuthCore"]),
