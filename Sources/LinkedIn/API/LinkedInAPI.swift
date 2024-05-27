@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class LinkedInAPI {
+public struct LinkedInAPI {
   private let client: HttpClient = .init()
   
   public init() {}

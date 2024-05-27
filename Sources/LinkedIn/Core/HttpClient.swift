@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HttpClient {
+struct HttpClient {
   func request(method: String, url: URL, headers: [Header]) async throws -> Data {
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = method
