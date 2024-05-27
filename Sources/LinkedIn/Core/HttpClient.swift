@@ -9,12 +9,10 @@
 import Foundation
 
 struct HttpClient {
-  func request(method: String, url: URL, headers: [Header]) async throws -> Data {
+  func request(method: String, url: URL, headers: [String: String]?) async throws -> Data {
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = method
-    headers.forEach {
-      urlRequest.setValue($0.value, forHTTPHeaderField: $0.name)
-    }
+    urlRequest.allHTTPHeaderFields = headers
     
     let (data, response) = try await URLSession.shared.data(for: urlRequest)
     
@@ -24,12 +22,5 @@ struct HttpClient {
     }
     
     return data
-  }
-}
-
-extension HttpClient {
-  struct Header {
-    let name: String
-    let value: String
   }
 }

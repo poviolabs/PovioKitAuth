@@ -40,7 +40,7 @@ public extension LinkedInAPI {
     let response = try await client.request(
       method: "POST",
       url: url,
-      headers: [.init(name: "Content-Type", value: "application/x-www-form-urlencoded")]
+      headers: ["Content-Type": "application/x-www-form-urlencoded"]
     )
     
     let decoder = JSONDecoder()
@@ -61,7 +61,7 @@ public extension LinkedInAPI {
     let response = try await client.request(
       method: "GET",
       url: url,
-      headers: [.init(name: "Authorization", value: "Bearer \(request.token)")]
+      headers: ["Authorization": "Bearer \(request.token)"]
     )
     
     let decoder = JSONDecoder()
@@ -78,7 +78,7 @@ public extension LinkedInAPI {
     let response = try await client.request(
       method: "GET",
       url: url,
-      headers: [.init(name: "Authorization", value: "Bearer \(request.token)")]
+      headers: ["Authorization": "Bearer \(request.token)"]
     )
     
     let decoded = try JSONDecoder().decode(LinkedInEmailResponse.self, from: response)
