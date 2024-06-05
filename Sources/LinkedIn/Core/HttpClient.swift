@@ -9,7 +9,13 @@
 import Foundation
 
 struct HttpClient {
-  func request(method: String, url: URL, headers: [String: String]?) async throws -> Data {
+  func request<D: Decodable>(
+    method: String,
+    url: URL,
+    headers: [String: String]?,
+    decodeTo decode: D.Type,
+    with decoder: JSONDecoder = .init()
+  ) async throws -> D {
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = method
     urlRequest.allHTTPHeaderFields = headers
@@ -21,6 +27,6 @@ struct HttpClient {
       throw NSError(domain: "HTTP Error", code: httpResponse.statusCode, userInfo: nil)
     }
     
-    return data
+    return try decoder.decode(decode, from: data)
   }
 }

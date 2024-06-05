@@ -37,12 +37,6 @@ public extension LinkedInAPI {
       throw Error.invalidUrl
     }
     
-    let response = try await client.request(
-      method: "POST",
-      url: url,
-      headers: ["Content-Type": "application/x-www-form-urlencoded"]
-    )
-    
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = .convertFromSnakeCase
     decoder.dateDecodingStrategy = .custom { decoder in
@@ -50,26 +44,34 @@ public extension LinkedInAPI {
       let secondsRemaining = try container.decode(Int.self)
       return Date().addingTimeInterval(TimeInterval(secondsRemaining))
     }
-    let decoded = try decoder.decode(LinkedInAuthResponse.self, from: response)
     
-    return decoded
+    let response = try await client.request(
+      method: "POST",
+      url: url,
+      headers: ["Content-Type": "application/x-www-form-urlencoded"],
+      decodeTo: LinkedInAuthResponse.self,
+      with: decoder
+    )
+    
+    return response
   }
   
   func loadProfile(with request: LinkedInProfileRequest) async throws -> LinkedInProfileResponse {
     guard let url = URL(string: Endpoints.profile.url) else { throw Error.invalidUrl }
     
-    let response = try await client.request(
-      method: "GET",
-      url: url,
-      headers: ["Authorization": "Bearer \(request.token)"]
-    )
-    
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = .convertFromSnakeCase
     decoder.dateDecodingStrategy = .iso8601
-    let decoded = try decoder.decode(LinkedInProfileResponse.self, from: response)
     
-    return decoded
+    let response = try await client.request(
+      method: "GET",
+      url: url,
+      headers: ["Authorization": "Bearer \(request.token)"],
+      decodeTo: LinkedInProfileResponse.self,
+      with: decoder
+    )
+    
+    return response
   }
   
   func loadEmail(with request: LinkedInProfileRequest) async throws -> LinkedInEmailValueResponse {
@@ -78,12 +80,11 @@ public extension LinkedInAPI {
     let response = try await client.request(
       method: "GET",
       url: url,
-      headers: ["Authorization": "Bearer \(request.token)"]
+      headers: ["Authorization": "Bearer \(request.token)"],
+      decodeTo: LinkedInEmailResponse.self
     )
     
-    let decoded = try JSONDecoder().decode(LinkedInEmailResponse.self, from: response)
-    
-    guard let emailObject = decoded.elements.first?.handle else {
+    guard let emailObject = response.elements.first?.handle else {
       throw Error.invalidResponse
     }
     
