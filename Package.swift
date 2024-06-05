@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
   name: "PovioKitAuth",
   platforms: [
-    .iOS(.v13),
-    .macOS(.v13)
+    .iOS(.v13)
   ],
   products: [
     .library(name: "PovioKitAuthCore", targets: ["PovioKitAuthCore"]),
@@ -17,16 +16,13 @@ let package = Package(
     .library(name: "PovioKitAuthLinkedIn", targets: ["PovioKitAuthLinkedIn"])
   ],
   dependencies: [
-    .package(url: "https://github.com/poviolabs/PovioKit", .upToNextMajor(from: "3.0.0")),
     .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "7.0.0")),
     .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "17.0.0")),
   ],
   targets: [
     .target(
       name: "PovioKitAuthCore",
-      dependencies: [
-        .product(name: "PovioKitPromise", package: "PovioKit"),
-      ],
+      dependencies: [],
       path: "Sources/Core",
       resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]
     ),
@@ -51,7 +47,6 @@ let package = Package(
       name: "PovioKitAuthFacebook",
       dependencies: [
         "PovioKitAuthCore",
-        .product(name: "PovioKitCore", package: "PovioKit"),
         .product(name: "FacebookLogin", package: "facebook-ios-sdk")
       ],
       path: "Sources/Facebook",
@@ -60,8 +55,7 @@ let package = Package(
     .target(
       name: "PovioKitAuthLinkedIn",
       dependencies: [
-        "PovioKitAuthCore",
-        .product(name: "PovioKitNetworking", package: "PovioKit")
+        "PovioKitAuthCore"
       ],
       path: "Sources/LinkedIn",
       resources: [.copy("../../Resources/PrivacyInfo.xcprivacy")]

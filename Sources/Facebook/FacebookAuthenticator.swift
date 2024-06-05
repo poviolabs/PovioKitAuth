@@ -8,7 +8,6 @@
 
 import Foundation
 import FacebookLogin
-import PovioKitCore
 import PovioKitAuthCore
 
 public final class FacebookAuthenticator {
@@ -106,7 +105,7 @@ private extension FacebookAuthenticator {
           
           do {
             let data = try JSONSerialization.data(withJSONObject: response, options: [])
-            let object = try data.decode(GraphResponse.self, with: decoder)
+            let object = try decoder.decode(GraphResponse.self, from: data)
 
             let authResponse = Response(
               userId: object.id,

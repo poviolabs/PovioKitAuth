@@ -6,7 +6,6 @@
 //  Copyright © 2024 Povio Inc. All rights reserved.
 //
 
-import PovioKitCore
 import SwiftUI
 import WebKit
 
@@ -40,7 +39,6 @@ public struct LinkedInWebView: UIViewRepresentable {
   public func updateUIView(_ uiView: UIViewType, context: Context) {
     guard let webView = uiView as? WKWebView else { return }
     guard let authURL = configuration.authorizationUrl(state: requestState) else {
-      Logger.error("Failed to geet auth url!")
       dismiss()
       return
     }
