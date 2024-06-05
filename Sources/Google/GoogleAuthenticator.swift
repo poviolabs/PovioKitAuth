@@ -9,7 +9,6 @@
 import Foundation
 import GoogleSignIn
 import PovioKitAuthCore
-import PovioKitPromise
 
 public final class GoogleAuthenticator {
   private let provider: GIDSignIn
@@ -23,45 +22,15 @@ public final class GoogleAuthenticator {
 extension GoogleAuthenticator: Authenticator {
   /// SignIn user.
   ///
-  /// Will return promise with the `Response` object on success or with `Error` on error.
+  /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(from presentingViewController: UIViewController,
                      hint: String? = .none,
-                     additionalScopes: [String]? = .none) -> Promise<Response> {
+                     additionalScopes: [String]? = .none) async throws -> Response {
     guard !provider.hasPreviousSignIn() else {
-      // restore user
-      return Promise { seal in
-        provider.restorePreviousSignIn { result, error in
-          switch (result, error) {
-          case (let user?, _):
-            seal.resolve(with: user.authResponse)
-          case (_, let actualError?):
-            seal.reject(with: Error.system(actualError))
-          case (.none, .none):
-            seal.reject(with: Error.unhandledAuthorization)
-          }
-        }
-      }
+      return try await restorePreviousSignIn()
     }
     
-    // sign in
-    return Promise { seal in
-      provider
-        .signIn(withPresenting: presentingViewController, hint: hint, additionalScopes: additionalScopes) { result, error in
-          switch (result, error) {
-          case (let signInResult?, _):
-            seal.resolve(with: signInResult.user.authResponse)
-          case (_, let actualError?):
-            let errorCode = (actualError as NSError).code
-            if errorCode == GIDSignInError.Code.canceled.rawValue {
-              seal.reject(with: Error.cancelled)
-            } else {
-              seal.reject(with: Error.system(actualError))
-            }
-          case (.none, .none):
-            seal.reject(with: Error.unhandledAuthorization)
-          }
-        }
-    }
+    return try await signInUser(from: presentingViewController, hint: hint, additionalScopes: additionalScopes)
   }
   
   /// Clears the signIn footprint and logs out the user immediatelly.
@@ -79,6 +48,44 @@ extension GoogleAuthenticator: Authenticator {
   /// Call this from UIApplicationDelegate’s `application:openURL:options:` method.
   public func canOpenUrl(_ url: URL, application: UIApplication, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
     GIDSignIn.sharedInstance.handle(url)
+  }
+}
+
+// MARK: - Private Methods
+private extension GoogleAuthenticator {
+  func restorePreviousSignIn() async throws -> Response {
+    try await withCheckedThrowingContinuation { continuation in
+      provider.restorePreviousSignIn { user, error in
+        if let user = user {
+          continuation.resume(returning: user.authResponse)
+        } else if let error = error {
+          continuation.resume(throwing: Error.system(error))
+        } else {
+          continuation.resume(throwing: Error.unhandledAuthorization)
+        }
+      }
+    }
+  }
+
+  func signInUser(from presentingViewController: UIViewController, hint: String?, additionalScopes: [String]?) async throws -> Response {
+    try await withCheckedThrowingContinuation { continuation in
+      provider
+        .signIn(withPresenting: presentingViewController, hint: hint, additionalScopes: additionalScopes) { result, error in
+          switch (result, error) {
+          case (let signInResult?, _):
+            continuation.resume(returning: signInResult.user.authResponse)
+          case (_, let actualError?):
+            let errorCode = (actualError as NSError).code
+            if errorCode == GIDSignInError.Code.canceled.rawValue {
+              continuation.resume(throwing: Error.cancelled)
+            } else {
+              continuation.resume(throwing: Error.system(actualError))
+            }
+          case (.none, .none):
+            continuation.resume(throwing: Error.unhandledAuthorization)
+          }
+        }
+    }
   }
 }
 

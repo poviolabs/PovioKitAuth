@@ -7,15 +7,14 @@
 //
 
 import Foundation
-import PovioKitNetworking
 
 extension LinkedInAPI {
-  enum Endpoints: EndpointEncodable {
+  enum Endpoints {
     case accessToken
     case profile
     case email
     
-    var path: Path {
+    var path: String {
       switch self {
       case .accessToken:
         return "accessToken"

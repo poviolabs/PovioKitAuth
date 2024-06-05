@@ -20,29 +20,15 @@ Please read [official documentation](https://developer.apple.com/sign-in-with-ap
 let authenticator = AppleAuthenticator() // conforms to `AppleAuthProvidable` protocol
 
 // signIn user
-authenticator
+let result = try await authenticator
   .signIn(from: <view-controller-instance>)
-  .finally {
-    // handle result
-  }
   
 // signIn user with nonce
-authenticator
+let result = try await authenticator
   .signIn(from: <view-controller-instance>, with: .random(length: 32))
-  .finally {
-    // handle result
-  }
 
 // get authentication status
 let status = authenticator.isAuthenticated
-
-// check authentication status
-// we should check this when we need to explicitly query authenticator to check if authenticated
-authenticator
-  .checkAuthentication
-  .finally {
-    // check result
-  }
 
 // signOut user
 authenticator.signOut() // all provider data regarding the use auth is cleared at this point

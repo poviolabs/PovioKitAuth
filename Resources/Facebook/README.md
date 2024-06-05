@@ -12,18 +12,12 @@ Please read [official documentation](https://developers.facebook.com/docs/facebo
 let authenticator = FacebookAuthenticator()
 
 // signIn user with default permissions
-authenticator
+let result = try await authenticator
   .signIn(from: <view-controller-instance>)
-  .finally {
-    // handle result
-  }
 
 // signIn user with custom permissions  
-authenticator
+let result = try await authenticator
   .signIn(from: <view-controller-instance>, with: [<array-of-custom-permissions>])
-  .finally {
-    // handle result
-  }
 
 // get authentication status
 let state = authenticator.isAuthenticated

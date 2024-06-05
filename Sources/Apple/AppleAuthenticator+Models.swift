@@ -22,11 +22,16 @@ public extension AppleAuthenticator {
     public let nameComponents: PersonNameComponents?
     public let email: Email
     public let expiresAt: Date
-
-    public var name: String {
-      [nameComponents?.givenName, nameComponents?.familyName]
-        .compactMap { $0 }
-        .joined(separator: " ")
+    
+    /// User full name represented by `givenName` and `familyName`
+    public var name: String? {
+      guard let givenName = nameComponents?.givenName else {
+        return nameComponents?.familyName
+      }
+      guard let familyName = nameComponents?.familyName else {
+        return givenName
+      }
+      return "\(givenName) \(familyName)"
     }
   }
   
