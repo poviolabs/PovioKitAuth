@@ -110,7 +110,7 @@ private extension FacebookAuthenticator {
             let authResponse = Response(
               userId: object.id,
               token: token.tokenString,
-              name: object.displayName,
+              nameComponents: .create(givenName: object.firstName, familyName: object.lastName),
               email: object.email,
               expiresAt: token.expirationDate
             )

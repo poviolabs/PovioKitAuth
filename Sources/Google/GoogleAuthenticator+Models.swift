@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PovioKitAuthCore
 
 public extension GoogleAuthenticator {
   struct Response {
@@ -14,8 +15,13 @@ public extension GoogleAuthenticator {
     public let idToken: String?
     public let accessToken: String
     public let refreshToken: String
-    public let name: String?
+    public let nameComponents: PersonNameComponents?
     public let email: String?
     public let expiresAt: Date?
+    
+    /// User full name represented by `givenName` and `familyName`
+    public var name: String? {
+      nameComponents?.name
+    }
   }
 }
