@@ -21,13 +21,15 @@ public extension PersonNameComponents {
 }
 
 public extension PersonNameComponents {
-  static func create(namePrefix: String? = .none,
-                     middleName: String? = .none,
-                     givenName: String? = .none,
-                     familyName: String? = .none,
-                     nameSuffix: String? = .none,
-                     nickname: String? = .none,
-                     phoneticRepresentation: PersonNameComponents? = .none) -> PersonNameComponents {
+  static func create(
+    namePrefix: String? = .none,
+    middleName: String? = .none,
+    givenName: String? = .none,
+    familyName: String? = .none,
+    nameSuffix: String? = .none,
+    nickname: String? = .none,
+    phoneticRepresentation: PersonNameComponents? = .none
+  ) -> PersonNameComponents {
     var components = PersonNameComponents()
     components.namePrefix = namePrefix
     components.familyName = familyName
