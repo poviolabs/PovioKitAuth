@@ -21,13 +21,15 @@ public extension PersonNameComponents {
 }
 
 public extension PersonNameComponents {
-  init(namePrefix: String? = .none,
-       middleName: String? = .none,
-       givenName: String? = .none,
-       familyName: String? = .none,
-       nameSuffix: String? = .none,
-       nickname: String? = .none,
-       phoneticRepresentation: PersonNameComponents? = .none) {
+  init(
+    namePrefix: String? = .none,
+    middleName: String? = .none,
+    givenName: String? = .none,
+    familyName: String? = .none,
+    nameSuffix: String? = .none,
+    nickname: String? = .none,
+    phoneticRepresentation: PersonNameComponents? = .none
+  ) {
     self.init()
     self.namePrefix = namePrefix
     self.familyName = familyName
