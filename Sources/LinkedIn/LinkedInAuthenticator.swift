@@ -42,7 +42,10 @@ extension LinkedInAuthenticator: Authenticator {
     return Response(
       userId: profileResponse.id,
       token: authResponse.accessToken,
-      nameComponents: .create(givenName: profileResponse.localizedFirstName, familyName: profileResponse.localizedLastName),
+      nameComponents: PersonNameComponents(
+        givenName: profileResponse.localizedFirstName,
+        familyName: profileResponse.localizedLastName
+      ),
       email: emailResponse.emailAddress,
       expiresAt: authResponse.expiresIn
     )
