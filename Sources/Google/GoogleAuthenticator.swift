@@ -107,7 +107,10 @@ private extension GIDGoogleUser {
       idToken: idToken?.tokenString,
       accessToken: accessToken.tokenString,
       refreshToken: refreshToken.tokenString,
-      name: profile?.name,
+      nameComponents: PersonNameComponents(
+        givenName: profile?.givenName,
+        familyName: profile?.familyName
+      ),
       email: profile?.email,
       expiresAt: accessToken.expirationDate
     )
