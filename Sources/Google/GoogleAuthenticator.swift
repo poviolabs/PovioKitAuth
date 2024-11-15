@@ -25,12 +25,16 @@ extension GoogleAuthenticator: Authenticator {
   /// Will asynchronously return the `Response` object on success or `Error` on error.
   public func signIn(
     from presentingViewController: UIViewController,
+    clientId: String? = nil,
     hint: String? = .none,
     additionalScopes: [String]? = .none
   ) async throws -> Response {
     guard !provider.hasPreviousSignIn() else {
       return try await restorePreviousSignIn()
     }
+    
+    // set clientId if provided (clientId is needed when doint auth via firebase)
+    clientId.map { provider.configuration = .init(clientID: $0) }
     
     return try await signInUser(
       from: presentingViewController,
