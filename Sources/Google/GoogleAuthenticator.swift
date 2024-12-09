@@ -33,7 +33,7 @@ extension GoogleAuthenticator: Authenticator {
       return try await restorePreviousSignIn()
     }
     
-    // set clientId if provided (clientId is needed when doint auth via firebase)
+    // set clientId if provided (clientId is needed when doing auth via firebase)
     clientId.map { provider.configuration = .init(clientID: $0) }
     
     return try await signInUser(
