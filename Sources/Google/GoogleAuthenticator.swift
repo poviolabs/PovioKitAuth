@@ -23,14 +23,24 @@ extension GoogleAuthenticator: Authenticator {
   /// SignIn user.
   ///
   /// Will asynchronously return the `Response` object on success or `Error` on error.
-  public func signIn(from presentingViewController: UIViewController,
-                     hint: String? = .none,
-                     additionalScopes: [String]? = .none) async throws -> Response {
+  public func signIn(
+    from presentingViewController: UIViewController,
+    clientId: String? = nil,
+    hint: String? = .none,
+    additionalScopes: [String]? = .none
+  ) async throws -> Response {
     guard !provider.hasPreviousSignIn() else {
       return try await restorePreviousSignIn()
     }
     
-    return try await signInUser(from: presentingViewController, hint: hint, additionalScopes: additionalScopes)
+    // set clientId if provided (clientId is needed when doing auth via firebase)
+    clientId.map { provider.configuration = .init(clientID: $0) }
+    
+    return try await signInUser(
+      from: presentingViewController,
+      hint: hint,
+      additionalScopes: additionalScopes
+    )
   }
   
   /// Clears the signIn footprint and logs out the user immediatelly.
@@ -46,7 +56,11 @@ extension GoogleAuthenticator: Authenticator {
   /// Boolean if given `url` should be handled.
   ///
   /// Call this from UIApplicationDelegate’s `application:openURL:options:` method.
-  public func canOpenUrl(_ url: URL, application: UIApplication, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+  public func canOpenUrl(
+    _ url: URL,
+    application: UIApplication,
+    options: [UIApplication.OpenURLOptionsKey : Any]
+  ) -> Bool {
     GIDSignIn.sharedInstance.handle(url)
   }
 }
@@ -66,11 +80,19 @@ private extension GoogleAuthenticator {
       }
     }
   }
-
-  func signInUser(from presentingViewController: UIViewController, hint: String?, additionalScopes: [String]?) async throws -> Response {
+  
+  func signInUser(
+    from presentingViewController: UIViewController,
+    hint: String?,
+    additionalScopes: [String]?
+  ) async throws -> Response {
     try await withCheckedThrowingContinuation { continuation in
       provider
-        .signIn(withPresenting: presentingViewController, hint: hint, additionalScopes: additionalScopes) { result, error in
+        .signIn(
+          withPresenting: presentingViewController,
+          hint: hint,
+          additionalScopes: additionalScopes
+        ) { result, error in
           switch (result, error) {
           case (let signInResult?, _):
             continuation.resume(returning: signInResult.user.authResponse)
@@ -107,7 +129,10 @@ private extension GIDGoogleUser {
       idToken: idToken?.tokenString,
       accessToken: accessToken.tokenString,
       refreshToken: refreshToken.tokenString,
-      name: profile?.name,
+      nameComponents: PersonNameComponents(
+        givenName: profile?.givenName,
+        familyName: profile?.familyName
+      ),
       email: profile?.email,
       expiresAt: accessToken.expirationDate
     )

@@ -16,7 +16,7 @@ let package = Package(
     .library(name: "PovioKitAuthLinkedIn", targets: ["PovioKitAuthLinkedIn"])
   ],
   dependencies: [
-    .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "7.0.0")),
+    .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "8.0.0")),
     .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "17.0.0")),
   ],
   targets: [

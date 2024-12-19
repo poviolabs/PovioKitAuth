@@ -25,13 +25,7 @@ public extension AppleAuthenticator {
     
     /// User full name represented by `givenName` and `familyName`
     public var name: String? {
-      guard let givenName = nameComponents?.givenName else {
-        return nameComponents?.familyName
-      }
-      guard let familyName = nameComponents?.familyName else {
-        return givenName
-      }
-      return "\(givenName) \(familyName)"
+      nameComponents?.name
     }
   }
   

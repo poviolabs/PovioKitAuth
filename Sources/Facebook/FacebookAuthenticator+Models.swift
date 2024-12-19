@@ -12,9 +12,14 @@ public extension FacebookAuthenticator {
   struct Response {
     public let userId: String
     public let token: String
-    public let name: String?
+    public let nameComponents: PersonNameComponents?
     public let email: String?
     public let expiresAt: Date
+    
+    /// User full name represented by `givenName` and `familyName`
+    public var name: String? {
+      nameComponents?.name
+    }
   }
   
   struct GraphResponse: Decodable {
@@ -34,13 +39,5 @@ public extension FacebookAuthenticator {
       let url: String
       let height: Int
     }
-  }
-}
-
-public extension FacebookAuthenticator.GraphResponse {
-  var displayName: String {
-    [firstName, lastName]
-      .compactMap { $0 }
-      .joined(separator: " ")
   }
 }

@@ -39,11 +39,13 @@ extension LinkedInAuthenticator: Authenticator {
     
     storage.set(true, forKey: storageIsAuthenticatedKey)
     
-    let name = "\(profileResponse.localizedFirstName) \(profileResponse.localizedLastName)"
     return Response(
       userId: profileResponse.id,
       token: authResponse.accessToken,
-      name: name,
+      nameComponents: PersonNameComponents(
+        givenName: profileResponse.localizedFirstName,
+        familyName: profileResponse.localizedLastName
+      ),
       email: emailResponse.emailAddress,
       expiresAt: authResponse.expiresIn
     )
