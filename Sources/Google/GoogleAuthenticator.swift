@@ -87,26 +87,28 @@ private extension GoogleAuthenticator {
     additionalScopes: [String]?
   ) async throws -> Response {
     try await withCheckedThrowingContinuation { continuation in
-      provider
-        .signIn(
-          withPresenting: presentingViewController,
-          hint: hint,
-          additionalScopes: additionalScopes
-        ) { result, error in
-          switch (result, error) {
-          case (let signInResult?, _):
-            continuation.resume(returning: signInResult.user.authResponse)
-          case (_, let actualError?):
-            let errorCode = (actualError as NSError).code
-            if errorCode == GIDSignInError.Code.canceled.rawValue {
-              continuation.resume(throwing: Error.cancelled)
-            } else {
-              continuation.resume(throwing: Error.system(actualError))
+      DispatchQueue.main.async {
+        self.provider
+          .signIn(
+            withPresenting: presentingViewController,
+            hint: hint,
+            additionalScopes: additionalScopes
+          ) { result, error in
+            switch (result, error) {
+            case (let signInResult?, _):
+              continuation.resume(returning: signInResult.user.authResponse)
+            case (_, let actualError?):
+              let errorCode = (actualError as NSError).code
+              if errorCode == GIDSignInError.Code.canceled.rawValue {
+                continuation.resume(throwing: Error.cancelled)
+              } else {
+                continuation.resume(throwing: Error.system(actualError))
+              }
+            case (.none, .none):
+              continuation.resume(throwing: Error.unhandledAuthorization)
             }
-          case (.none, .none):
-            continuation.resume(throwing: Error.unhandledAuthorization)
           }
-        }
+      }
     }
   }
 }
