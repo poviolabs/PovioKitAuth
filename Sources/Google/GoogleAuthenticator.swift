@@ -81,6 +81,7 @@ private extension GoogleAuthenticator {
     }
   }
   
+  @MainActor
   func signInUser(
     from presentingViewController: UIViewController,
     hint: String?,
