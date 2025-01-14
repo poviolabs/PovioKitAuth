@@ -32,7 +32,7 @@
 ### Swift Package Manager
 - In Xcode, click `File` -> `Add Packages...`  
 - Insert `https://github.com/poviolabs/PovioKitAuth` in the Search field.
-- Select a desired `Dependency Rule`. Usually "Up to Next Major Version" with "1.0.0".
+- Select a desired `Dependency Rule`. Usually "Up to Next Major Version" with "2.1.0".
 - Select "Add Package" button and check one or all given products from the list:
   - *PovioKitAuthCore* (core library)
   - *PovioKitAuthApple* (Apple auth components)
