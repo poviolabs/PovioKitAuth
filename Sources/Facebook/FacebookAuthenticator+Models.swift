@@ -3,7 +3,7 @@
 //  PovioKitAuth
 //
 //  Created by Borut Tomazin on 30/11/2022.
-//  Copyright © 2024 Povio Inc. All rights reserved.
+//  Copyright © 2025 Povio Inc. All rights reserved.
 //
 
 import Foundation
